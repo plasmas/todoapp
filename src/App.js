@@ -1,68 +1,85 @@
 import React, { useState } from 'react';
-import logo from './logo.svg';
 import './App.css';
 
-// function App() {
+// const App = () => {
+
+//   const [TDList, setTDList] = useState([
+//     {content: 'Buy milk', iscomplete: false},
+//     {content: 'get newspaper', iscomplete: true},
+//     {content: 'go for a walk', iscomplete: true},
+//   ]);
+
+//   const removeHandler = (i) => {
+//     setTDList(TDList.splice(i,1))
+//   }
+
+//   const createHandler = () => {
+
+//   }
+
+//   console.log(TDList);
 //   return (
-    // <div className="App">
-    //   <header className="App-header">
-    //     <Example count={3} theme={'red'}/>
-    //   </header>
-    // </div>
-    // <div className="App">
-    //   <header className="App-header">
-    //     <img src={logo} className="App-logo" alt="logo" />
-    //     <p>
-    //       Edit <code>src/App.js</code> and save to reload.
-    //     </p>
-    //     <a
-    //       className="App-link"
-    //       href="https://reactjs.org"
-    //       target="_blank"
-    //       rel="noopener noreferrer"
-    //     >
-    //       Learn React
-    //     </a>
-    //   </header>
-    // </div>
-//   );
+//     <div className="App">
+//       <div className="App-header">You have {TDList.length} To-Do items</div>
+//       <List TDList={TDList} removeHandler={removeHandler} />
+//       <CreateBox createHandler={createHandler} />
+//     </div>
+//   )
 // }
 
+class App extends React.Component {
 
-const App = () => {
+  constructor(props) {
+    super(props);
+    this.state = {
+      TDList: [
+        {content: 'Buy milk', iscomplete: false},
+        {content: 'get newspaper', iscomplete: true},
+        {content: 'go for a walk', iscomplete: true},
+      ],
+      version: 1.3
+    };
+    this.removeHandler = this.removeHandler.bind(this);
+    this.createHandler = this.createHandler.bind(this);
+  }
 
-  const [TDList, setTDList] = useState([
-    {content: 'Buy milk', iscomplete: false},
-    {content: 'get newspaper', iscomplete: true},
-    {content: 'go for a walk', iscomplete: true},
-  ]);
+  removeHandler(i) {
+    let TDList = this.state.TDList;
+    TDList.splice(i, 1);
+    let newList = TDList;
+    console.log(newList);
+    this.setState({
+      TDList: newList,
+      version: 1.4
+    })
+    console.log(this.state)
+  }
 
-  const removeHandler = () => {
+  createHandler() {
 
   }
 
-  const createHandler = () => {
-
+  render() {
+    return (
+      <div className="App">
+        <div className="App-header">You have {this.state.TDList.length} To-Do items</div>
+        <List TDList={this.state.TDList} removeHandler={this.removeHandler} />
+        <CreateBox createHandler={this.createHandler} />
+      </div>
+    )
   }
-
-  return (
-    <div className="App">
-      <div className="App-header">You have {TDList.length} To-Do items</div>
-      <List TDList={TDList} removeHandler={removeHandler} />
-      <CreateBox createHandler={createHandler} />
-    </div>
-  )
 }
+
 
 const List = prep => {
 
   const TDList = prep.TDList;
 
   let renderList = [];
-  for (const item of TDList) {
-    renderList.push(<div className="item">{item.content}</div>);
+  for (const index in TDList) {
+    renderList.push(<div key={index} className="item">{TDList[index].content}</div>);
+    renderList.push(<button key={"button"+index} className="removeButton" onClick={() => prep.removeHandler(index)}>X</button>)
   }
-
 
   return (
     <div className="List">
@@ -75,28 +92,4 @@ const CreateBox = prep => {
   return null;
 }
 
-
-// const Example = (prep) => {
-//   const [count, setCount] = useState(4);
-//   const [theme, setTheme] = useState({Theme: "blue"});
-
-//   function incrementCount() {
-//     setCount(oldCount => oldCount + 1);
-//   }
-
-//   function decrementCount() {
-//     setCount(oldCount => oldCount - 1);
-//     setTheme(pre => {
-//       return {Theme: 'red'}
-//     })
-//   }
-
-//   return (
-//     <div>
-//       <p>You Clicked me {count} times with {theme.Theme}</p>
-//       <button onClick={incrementCount}>Inc</button>
-//       <button onClick={decrementCount}>Dec</button>
-//     </div>
-//   )
-// }
 export default App;
